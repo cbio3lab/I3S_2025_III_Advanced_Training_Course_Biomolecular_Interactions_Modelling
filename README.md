@@ -7,20 +7,16 @@ The In Silico Hands-on Tutorials:
 
 1. Shell scripting
 
-  <link>
+  -link>
 
 2. Peptide Structure Curation.
 
-  <link>
+  -link>
 
-3. Peptide Structure Curation.
+3. Lipophilicity and Chemoinformatics Descriptors Calculation.
+
+  -link>
    
-  <link>
+4. QSPR Model.
 
-5. Lipophilicity Calculation.
-
-  <link>
-   
-7. QSPR Model.
-
-   <link>
+  -link>
