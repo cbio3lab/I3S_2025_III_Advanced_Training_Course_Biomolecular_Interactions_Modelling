@@ -7,7 +7,7 @@ The In Silico Hands-on Tutorials:
 
 1. Shell scripting
 
-  -link>
+ [COLAB-1](https://colab.research.google.com/drive/10DFooWKJaEm1Vd9sFLmvjN_bBTXZJkjq?usp=sharing)
 
 2. Peptide Structure Curation.
 
