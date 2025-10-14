@@ -9,14 +9,6 @@ The In Silico Hands-on Tutorials:
 
  [COLAB-1](https://colab.research.google.com/drive/10DFooWKJaEm1Vd9sFLmvjN_bBTXZJkjq?usp=sharing)
 
-2. Peptide Structure Curation.
-
-  -link>
-
-3. Lipophilicity and Chemoinformatics Descriptors Calculation.
-
-  -link>
-   
-4. QSPR Model.
+2. Peptide Structure Curation & QSPR Model.
 
   -link>
