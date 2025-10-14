@@ -14,3 +14,5 @@ The In Silico Hands-on Tutorials:
 [COLAB-2](https://colab.research.google.com/drive/1fwaeIC3QWBaTjRYSNNTCIaRxc4Q_3ZP8?usp=sharing)
 
 3. QSPR Model
+
+[COLAB-3](https://colab.research.google.com/drive/1yBwWvc0Q2lzt2lNCka_hUmR1s27odJd9?usp=sharing)
