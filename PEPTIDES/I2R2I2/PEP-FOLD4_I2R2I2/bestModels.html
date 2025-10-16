@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pose explorer</title>
+    <link href="/portal/css/mobyle.css" rel="stylesheet" type="text/css" media="screen">
+    <style>
+        #peptide_res_box {
+            padding: 20px;
+            margin: 20px;
+            width: 100%;
+        }
+
+        #viewport {
+            flex-grow: 1;
+            position: relative;
+            width: 800px;
+            height: 800px;
+            border: solid 1px black;
+            border-radius: 20px;
+
+        }
+
+        .view3d {
+            border: solid 1px black;
+            border-radius: 20px;
+        }
+
+        .view3d input {
+            font-size: 1em;
+        }
+
+        body {
+            font-family: 'arial';
+            font-weight: bold;
+        }
+    </style>
+    <meta charset="utf-8">
+  </head>
+    
+  <body style="background: white;">
+    <div id='peptide_res_box'>
+      <h2> Best models </h2>
+      <div id="result">
+        <div class="viewport" id="viewport"></div>
+      </div>
+      <div id="dock_output" class="output"></div>
+    </div>
+  </body>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/arose/ngl@v2.1.0/dist/ngl.js"></script>
+  <script>
+    var stage = new NGL.Stage("viewport", {
+        backgroundColor: "white",
+        cameraType: "orthographic"
+    })
+
+    window.addEventListener("resize", function(event) {
+        stage.handleResize();
+    }, false);
+
+    function addElement (el) {
+        Object.assign(el.style, {
+            position: "absolute",
+            zIndex: 10
+        })
+        stage.viewer.container.appendChild(el)
+    }
+
+    function createElement (name, properties, style) {
+        var el = document.createElement(name)
+        Object.assign(el, properties)
+        Object.assign(el.style, style)
+        return el
+    }
+
+    function createSelect (options, properties, style) {
+        var select = createElement("select", properties, style)
+        options.forEach(function (d) {
+            select.add(createElement("option", {
+                value: d[ 0 ], text: d[ 1 ], selected: d[ 2 ]
+            }))
+        })
+        return select
+    }
+
+    var representations = {}
+
+    var resType = NGL.ColormakerRegistry.addSelectionScheme([
+        ["orangered", "Asp or Glu"],
+        ["cadetblue", "His or Lys or Arg"],
+        ["orange", "Ser or Thr"],
+        ["black", "Gly or Pro"],
+        ["green", "Gln or Asn"],
+        ["white", "Ala or Val or Leu or Ile or Met"],
+        ["yellow", "Cys"],
+        ["brown","  Tyr or Phe or Trp"]
+    ]);
+
+    var sstrucType = NGL.ColormakerRegistry.addSelectionScheme([
+        ["red", "helix"],
+        ["green", "sheet"],
+        ["white", "not helix and not sheet"],
+    ]);
+
+    function loadStructure(input) {
+        stage.removeAllComponents();
+        return stage.loadFile(input, {
+            ext: "pdb",
+            asTrajectory: true,
+            defaultRepresentation: true
+        }).then(function(o){
+            o.removeAllRepresentations()
+            o.autoView()
+            representations["licorice"] = o.addRepresentation("licorice", {
+                visible: true,
+                opacity: 1.0,
+            } );
+            representations["spacefill"] = o.addRepresentation("spacefill", {
+                visible: false,
+                opaqueBack: false,
+                opacity: 0.5,
+            })
+            representations["surface"] = o.addRepresentation("surface", {
+                visible: false,
+                surfaceType: "vws",
+                color: "lightgrey",
+                opaqueBack: false,
+                opacity: 0.5,
+            })
+            representations["cartoon"] = o.addRepresentation("cartoon", {
+                color: "residueindex",
+                visible: true,
+            })
+            var pa = o.structure.getPrincipalAxes()
+            stage.animationControls.rotate(pa.getRotationQuaternion(), 1500)
+            poseButton.max = stage.compList[0].structure.frames.length
+        })
+    }
+
+    function updatePose(pose_num) {
+        document.getElementById("pose_label").innerHTML = pose_num;
+        if (stage.compList[0] != undefined) {
+          stage.compList[0].trajList[0].setFrame(pose_num - 1);
+        }
+    }
+
+    var poseTitle = createElement("span", {
+        innerHTML: "Model:",
+    }, { top: "24px", left: "12px" })
+    addElement(poseTitle)
+
+    var poseButton = createElement("input", {
+        type: "range",
+        value: 1,
+        min: 1,
+        max: 10,
+        step: 1,
+        onchange: function(e) {
+            pose = e.target.value
+            updatePose(pose);
+        },
+    }, { top: "48px", left: "12px", width: "72px"})
+    addElement(poseButton)
+
+    var poseLabel = createElement("span", {
+        class: "coor",
+        id: "pose_label",
+        innerHTML: "1"
+    }, { top: "48px", left: "90px" })
+    addElement(poseLabel)
+
+    var cartoonTitle = createElement("span", {
+        innerHTML: "Cartoon:",
+    }, { top: "24px", left: "120px" })
+    addElement(cartoonTitle)
+
+    var cartoonColor = createSelect([
+        ["off", "Off", ""],
+        ["residueindex", "Rainbow", "selected"],
+        [sstrucType, "Secondary structure", ""],
+        ["electrostatic", "Electrostatic charge", ""],
+        ["hydrophobicity", "Hydrophobicity", ""],
+        [resType, "Residue type", ""],
+    ], {
+        onchange: function(e) {
+            if (e.target.value == 'off') {
+                representations["cartoon"].setVisibility(false);
+            } else {
+                representations["cartoon"].setVisibility(true);
+                representations["cartoon"].setColor(e.target.value);
+            }
+        }
+    }, { top: "48px", left: "120px", width: "120px"});
+    addElement(cartoonColor);
+
+    var LicoriceTitle = createElement("span", {
+        innerHTML: "Licorice:",
+    }, { top: "24px", left: "260px" })
+    addElement(LicoriceTitle)
+
+    var licoriceColor = createSelect([
+        ["off", "Off", ""],
+        ["element", "Atom type", "selected"],
+        ["atomindex", "Rainbow", ""],
+        [resType, "Residue type", ""],
+    ], {
+        onchange: function(e) {
+            if (e.target.value == 'off') {
+                representations["licorice"].setVisibility(false);
+            } else {
+                representations["licorice"].setVisibility(true);
+                representations["licorice"].setColor(e.target.value)
+            }
+        }
+    }, { top: "48px", left: "260px", width: "120px"});
+
+    addElement(licoriceColor);
+
+    var SurfaceTitle = createElement("span", {
+        innerHTML: "Surface:",
+    }, { top: "24px", left: "400px" })
+    addElement(SurfaceTitle)
+
+    var surfaceColor = createSelect([
+        ["uniform", "Uniform", "selected"],
+        ["residueindex", "Rainbow", ""],
+        ["element", "Atom type", ""],
+        [resType, "Residue type", ""],
+        [sstrucType, "Secondary structure", ""],
+        ["hydrophobicity", "Hydrophobicity", ""],
+
+    ], {
+        onchange: function(e) {
+            representations["surface"].setColor(e.target.value)
+        }
+    }, { top: "80px", left: "400px", width: "128px"});
+    addElement(surfaceColor);
+
+    var surfaceType = createSelect([
+        ['off', 'None', "selected"],
+        ['vws', 'Van der Waals', ""],
+        ['ms', 'Molecular surface', ""],
+        ['sas', 'Solvent accessible surface', ""],
+    ], {
+        onchange: function(e) {
+            if (e.target.value == 'off') {
+                representations["surface"].setVisibility(false);
+            } else {
+                representations["surface"].setParameters({
+                    surfaceType: e.target.value,
+                });
+                representations["surface"].setVisibility(true);
+            }
+        }
+    }, { top: "48px", left: "400px", width: "128px"})
+
+    addElement(surfaceType);
+
+    var SurfaceOpacityTitle = createElement("span", {
+        innerHTML: "Surface opacity:",
+    }, { top: "24px", left: "540px" })
+    addElement(SurfaceOpacityTitle)
+
+    var surfaceOpacity = createElement("input", {
+        type: "range",
+        value: "50",
+        min: "0",
+        max: "100",
+        oninput: function(e) {
+            representations["surface"].setParameters({
+                opacity: parseFloat(e.target.value) / 100
+            })
+        },
+    }, { top: "48px", left: "540px", width: "96px"})
+    addElement(surfaceOpacity)
+
+    var pdbfile = "/data/jobs/PEP-FOLD4/G15304346204996/PEPFOLD-5bestmodels.pdb"
+
+    loadStructure(pdbfile)
+
+  </script>
+</html>
