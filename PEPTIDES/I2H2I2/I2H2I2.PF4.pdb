@@ -1,0 +1,67 @@
+HEADER  PEPFOLD-00016_bestene1-mc.pdb
+REMARK  Component boundaries: 0: 1 6 
+
+REMARK  SA Trajectory: BaZ
+REMARK     eCACA      eDH      eHb  ePhiPos eVdWBBBB eVdWBBSC eVdWSCSC    Total 
+REMARK    -0.044    0.000   -3.227    0.217   -0.275    0.976   -2.174   -4.528
+REMARK   sOPEP Energy: -4.52774
+MODEL        1         
+ATOM      0  C   ACE A   0      19.475  87.476 -17.851
+ATOM      1  O   ACE A   0      19.680  87.510 -19.059
+ATOM      2  CH3 ACE A   0      19.373  88.759 -17.039
+ATOM      0  N   ILE A   1      19.451  86.332 -17.210
+ATOM      1  CA  ILE A   1      19.078  86.199 -15.800
+ATOM      2  C   ILE A   1      20.068  85.366 -14.984
+ATOM      3  O   ILE A   1      20.301  85.658 -13.806
+ATOM      4  H   ILE A   1      19.511  85.385 -17.624
+ATOM      5  CB  ILE A   1      17.695  85.526 -15.721
+ATOM      6  CG1 ILE A   1      16.624  86.341 -16.427
+ATOM      8  CG2 ILE A   1      17.281  85.357 -14.268
+ATOM      0  N   ILE A   2      20.642  84.335 -15.604
+ATOM      1  CA  ILE A   2      21.602  83.477 -14.915
+ATOM      2  C   ILE A   2      22.927  84.199 -14.689
+ATOM      3  O   ILE A   2      23.717  83.785 -13.842
+ATOM      4  H   ILE A   2      20.417  84.150 -16.537
+ATOM      5  CB  ILE A   2      21.856  82.220 -15.768
+ATOM      6  CG1 ILE A   2      22.474  82.561 -17.114
+ATOM      8  CG2 ILE A   2      20.547  81.488 -16.017
+ATOM      0  N   HIS A   3      23.174  85.263 -15.450
+ATOM      1  CA  HIS A   3      24.400  86.041 -15.286
+ATOM      2  C   HIS A   3      24.316  86.933 -14.057
+ATOM      3  O   HIS A   3      25.336  87.272 -13.462
+ATOM      4  H   HIS A   3      22.524  85.530 -16.129
+ATOM      5  CB  HIS A   3      24.611  86.920 -16.533
+ATOM      6  CG  HIS A   3      24.779  86.124 -17.840
+ATOM      7  CD2 HIS A   3      23.812  85.831 -18.750
+ATOM      8  NE2 HIS A   3      24.404  85.114 -19.743
+ATOM      9  CE1 HIS A   3      25.678  84.957 -19.483
+ATOM     10  ND1 HIS A   3      25.960  85.550 -18.338
+ATOM      0  N   HIS A   4      23.095  87.308 -13.685
+ATOM      1  CA  HIS A   4      22.867  88.127 -12.499
+ATOM      2  C   HIS A   4      22.947  87.146 -11.324
+ATOM      3  O   HIS A   4      23.638  87.421 -10.344
+ATOM      4  H   HIS A   4      22.328  87.027 -14.222
+ATOM      5  CB  HIS A   4      21.478  88.791 -12.555
+ATOM      6  CG  HIS A   4      21.310  89.794 -13.711
+ATOM      7  CD2 HIS A   4      20.760  89.552 -14.931
+ATOM      8  NE2 HIS A   4      20.817  90.717 -15.631
+ATOM      9  CE1 HIS A   4      21.374  91.652 -14.901
+ATOM     10  ND1 HIS A   4      21.693  91.145 -13.725
+ATOM      0  N   ILE A   5      22.233  86.037 -11.453
+ATOM      1  CA  ILE A   5      22.219  85.031 -10.405
+ATOM      2  C   ILE A   5      23.506  84.334  -9.997
+ATOM      3  O   ILE A   5      23.839  84.191  -8.820
+ATOM      4  H   ILE A   5      21.709  85.893 -12.265
+ATOM      5  CB  ILE A   5      21.244  83.929 -10.859
+ATOM      6  CG1 ILE A   5      19.812  84.433 -10.938
+ATOM      8  CG2 ILE A   5      21.284  82.765  -9.883
+ATOM      0  N   ILE A   6      24.249  83.913 -11.014
+ATOM      1  CA  ILE A   6      25.488  83.180 -10.786
+ATOM      2  C   ILE A   6      26.787  83.966 -10.878
+ATOM      3  O   ILE A   6      27.695  83.749 -10.075
+ATOM      4  H   ILE A   6      23.962  84.098 -11.930
+ATOM      5  CB  ILE A   6      25.557  82.049 -11.829
+ATOM      6  CG1 ILE A   6      24.363  81.112 -11.733
+ATOM      8  CG2 ILE A   6      26.821  81.230 -11.624
+TER
+ENDMDL                       

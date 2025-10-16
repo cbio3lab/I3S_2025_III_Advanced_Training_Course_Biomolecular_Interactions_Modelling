@@ -1,0 +1,1996 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet  href="job.xsl" type="text/xsl"?><jobState>
+  <program>
+    <head>
+      <name>PEP-FOLD4</name>
+      <version>4.0</version>
+      <doc>
+        <title>PEP-FOLD</title>
+        <description>
+          <text lang="en">De novo peptide structure prediction.</text>
+        </description>
+        <comment>
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>PEP-FOLD is a service for the de novo prediction of peptide conformation from amino acid sequence. It is based on a Hidden Markov Model derived Structural Alphabet that describes the conformation of a polypeptidic chain as a series of local overlapping canonical conformations of fragments of 4 amino acids. PEP-FOLD 4 comes with a new version of the force-field relying on the general Mie formulation of non bonded interactions. PEP-FOLD4 also includes for the first time a term modeling pH, ionic strength dependence, and extremity blocking.</p>
+            <p>New features are:</p>
+            <ol>
+              <li>More concise format for results, including one multimodel pdb file for the 5 best models, and fragment trajectory only for the others. </li>
+              <li>Facilities to perform off-web additional calculations, including preparing simulation for batches of up to 10 sequences at a time. (Docker image)</li>
+              <li>Optional use of Debye-Hueckel contribution. </li>
+            </ol>
+            <div class="remark">
+              <b>Note:</b> PEP-FOLD4, while improved, still does not presently manage disulfide bonds as efficiently as PEP-FOLD2. Please use former PEP-FOLD server to this goal. We remind that for a number of disulfide bond larger than 2, PEP-FOLD shows limited performance.
+          </div>
+          </div>
+        </comment>
+        <authors> Rey J, Murail S, de Vries S, Derreumaux P, Tufféry P.</authors>
+        <reference>PEP-FOLD4: A pH-dependent force field for peptide structure prediction in aqueous solution. Nucleic Acids Res., 2023.</reference>
+        <doclink>http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD4</doclink>
+      </doc>
+      <progressReport>.progress.txt</progressReport>
+      <category>Peptides</category>
+      <command>pep-fold4.py</command>
+      <env name="ENVIRONMENT_MODULE">rpbs_services/py3-rpbs</env>
+      <env name="ENVIRONMENT_TYPE">conda</env>
+      <interface type="form" generated="true">
+        <fieldset xmlns="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="demo_mode">
+          <legend>Demonstration mode</legend>
+          <div>
+            <div class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="wmesg_demo">
+              <label class="parameter" title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+                Fill the service form with preset data
+              </label>
+              <input type="button" name="demo" value="Load"/>
+              <div class="remark">
+                <b>Note:</b> PEP-FOLD4 will load a pre-configured test case. Click the "Reset" button above to reset the form.
+              </div>
+              <script>
+                $$('div[id^=\'ms-forms::\'].tabPanel').findAll(function(e){return e.visible()}).first().down('[name="demo"]').observe('click', function() {
+                    $$('div[id^=\'ms-forms::\'].tabPanel').findAll(function(e){return e.visible()}).first().down('[name="iSeq.mode"][value="paste"]').fire('databox:switch');
+                    $$('div[id^=\'ms-forms::\'].tabPanel').findAll(function(e){return e.visible()}).first().down('[name="iSeq"]').value=`&gt;tau_fragment
+DNIKHVPGGGSVQIVYK`;
+                    $$('[name="DebyeHuckel"] option')[1].selected=true;
+                    $$('[name="pH"] option')[10].selected=true;
+                    $$('[name="ionicStr"] option')[0].selected=true;
+                });
+              </script>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset xmlns="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="InputData">
+          <legend>Input data</legend>
+          <div>
+            <fieldset class="parameter &#10;&#9;&#9;&#9;&#9;mandatory&#10;&#9;&#9;&#9;&#9;" title="This parameter is mandatory" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="Sequence" data-datatype-superclass="" data-biotype="" data-card="" data-formats="FASTA " data-parametername="iSeq">
+              <legend>Peptide amino acid sequence<a href="#idm139873114763040::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              </legend>
+              <div id="idm139873114763040::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+              Use this input field to specify the amino acid sequence of the peptide. 
+              The FASTA format.s preferred Example: <br/>
+              &gt;tau_fragment<br/>
+              DNIKHVPGGGSVQIVYK<br/>
+              However a raw format is also accepted:<br/>
+	      DNIKHVPGGGSVQIVYK<br/>
+              For more information about the format, please read the sequence format tutorial (Mobyle Tutorials section, on the left).
+              <div class="remark">
+                    <b>Note:</b> Simulated sequence length must be comprised between 5 and 50 amino-acids.
+              </div>
+              Choosing the db item, you can directly select the sequence of a PDB file specifying an identifier on the form: 1dep_A for chain A of the 1dep entry. The chain identifier is mandatory.
+            </div>
+              </div>
+              <textarea name="iSeq" cols="60" rows="7"> </textarea>
+            </fieldset>
+            <label class="parameter &#10;&#9;&#9;&#9;&#9;mandatory&#10;&#9;&#9;&#9;&#9;" title="This parameter is mandatory" data-issimple="true" data-ismultiple="false" data-default-value="PEPFOLD" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="joblabel">Run label<a href="#idm139873114866192::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <input name="joblabel" type="text" value="PEPFOLD"/>
+              <div id="idm139873114866192::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+              This label will correspond to the first field of the file names of the run, available for download.
+            </div>
+              </div>
+            </label>
+          </div>
+        </fieldset>
+        <fieldset xmlns="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="Options">
+          <legend>3D generation options</legend>
+          <div>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="fbt" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="generator">Generator<a href="#idm139873114409296::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="generator">
+                <option value="fbt" selected="selected">fbt</option>
+                <option value="ts3">ts3</option>
+                <option value="ts4">ts4</option>
+                <option value="ts5">ts5</option>
+              </select>
+              <div id="idm139873114409296::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                Generator in use for the runs. 
+            </div>
+                <div>
+                Usually, the forward backtrack (fbt) is rather good, but taboo-sampling (ts3, ts4, ts5) can be a better option for peptides in interaction. ts5 should only be used for peptide sizes longer than 20 amino acids, and ts4 is not recommanded below 12 amino acids. 
+            </div>
+              </div>
+            </label>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="100" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="nruns">Number of models<a href="#idm139873114491904::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="nruns">
+                <option value="100" selected="selected">100</option>
+                <option value="200">200</option>
+              </select>
+              <div id="idm139873114491904::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                Number of independent simulations to be run. 
+            </div>
+                <div>
+                Usually, 100 is enough to get a good idea of peptide candidate conformations. In some cases however, generating 200 models can lead to improvement. 
+            </div>
+              </div>
+            </label>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="30000" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="mcsteps">Monte Carlo steps<a href="#idm139873114815776::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="mcsteps">
+                <option value="30000" selected="selected">30000</option>
+                <option value="0">0</option>
+              </select>
+              <div id="idm139873114815776::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                The number of Monte Carlo steps. 30 000 is the default. Setting it to 0 will invalidate the Monte Carlo procedure, and return un-refined models.
+            </div>
+              </div>
+            </label>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="370" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="mcT">Monte Carlo temperature<a href="#idm139873114335920::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="mcT">
+                <option value="370" selected="selected">370</option>
+                <option value="700">700</option>
+              </select>
+              <div id="idm139873114335920::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                The  Monte Carlo temperature. 370K was found effective with PEP-FOLD4. 700K can be considered to force larger sampling during the Monte Carlo.
+            </div>
+              </div>
+            </label>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="1" data-datatype="Integer" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="seed">Pseudo-random seed<a href="#idm139873114568336::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <input name="seed" type="text" value="1"/>
+              <div id="idm139873114568336::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                The pseudo random generator seed. PEP-FOLD is reproducible using the same seed with the same set of parameters. Negative values will trigger the use of a random seed value.
+            </div>
+              </div>
+            </label>
+            <fieldset class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="_3DPatch" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="" data-parametername="probFile">
+              <legend>Probabilities from a previous run<a href="#idm139873114452304::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              </legend>
+              <div id="idm139873114452304::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+              Entering the probabilities from a previous run with the same sequence will avoid redundant calculation of the probabilities and speed up the calculations. Warning: do not try to input irrelevant values as it will results in spurious models.
+            </div>
+              </div>
+              <textarea name="probFile" cols="60" rows="7"> </textarea>
+            </fieldset>
+          </div>
+        </fieldset>
+        <fieldset xmlns="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="Advanced_options">
+          <legend>Debye-Huckel formalism</legend>
+          <div>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="0" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="DebyeHuckel">Use Debye-Huckel contribution<a href="#idm139873114440608::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="DebyeHuckel">
+                <option value="0" selected="selected">No</option>
+                <option value="1">Yes</option>
+              </select>
+              <div id="idm139873114440608::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                Trigger the use of Debye-Huckel contribution.
+            </div>
+              </div>
+            </label>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="7." data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="pH">Solvent pH<a href="#idm139873117182016::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="pH">
+                <option value="2">2</option>
+                <option value="2.5">2.5</option>
+                <option value="3">3</option>
+                <option value="3.5">3.5</option>
+                <option value="4">4</option>
+                <option value="4.5">4.5</option>
+                <option value="5.">5.</option>
+                <option value="5.5">5.5</option>
+                <option value="6.">6.</option>
+                <option value="6.5">6.5</option>
+                <option value="7." selected="selected">7.</option>
+                <option value="7.5">7.5</option>
+                <option value="8.">8.</option>
+                <option value="8.5">8.5</option>
+                <option value="9.">9.</option>
+                <option value="9.5">9.5</option>
+                <option value="10.">10.</option>
+                <option value="10.5">10.5</option>
+                <option value="11.">11.</option>
+                <option value="11.5">11.5</option>
+                <option value="12.">12.</option>
+                <option value="12.5">12.5</option>
+                <option value="13">13</option>
+              </select>
+              <div id="idm139873117182016::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                The pH at which the simulation is run (only effective if Debye-Huckel in use).
+            </div>
+              </div>
+            </label>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="1" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="ionicStr">Ionic strength (mM)<a href="#idm139873114590064::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="ionicStr">
+                <option value="1" selected="selected">1</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="150">150</option>
+                <option value="200">200</option>
+                <option value="300">300</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+              </select>
+              <div id="idm139873114590064::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                The value of the ionic strenght assimilated to NaCl concentration (mM).
+            </div>
+              </div>
+            </label>
+            <label class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="None" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="DHNeutralExt">Block extremities<a href="#idm139873114468400::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              <select name="DHNeutralExt">
+                <option value="None" selected="selected">None</option>
+                <option value="Both">Both</option>
+                <option value="Nter">Nter</option>
+                <option value="Cter">Cter</option>
+              </select>
+              <div id="idm139873114468400::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+                Trigger the neutralization of extremities (None means Nter and Cter are charged).
+            </div>
+              </div>
+            </label>
+            <fieldset class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="_3DPatch" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="" data-parametername="pKa">
+              <legend>Non standard pKa values for specific residues (ONE per line)<a href="#idm139873114253552::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+              </legend>
+              <div id="idm139873114253552::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <div>
+              The pKa values must be specified ONE per line. Each line on the form: <b>index pKa</b>, where index is the position of the residue in the sequence (from 1).
+              <div class="success">
+                    <b>Example:</b> 2 5.3
+              </div>
+                </div>
+              </div>
+              <textarea name="pKa" cols="60" rows="7"> </textarea>
+            </fieldset>
+          </div>
+        </fieldset>
+      </interface>
+      <interface type="job_input" generated="true">
+        <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="demo_mode">
+          <xhtml:legend>Demonstration mode</xhtml:legend>
+          <xhtml:div>
+            <xhtml:div data-parametername="wmesg_demo" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats=""/>
+          </xhtml:div>
+        </xhtml:fieldset>
+        <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="InputData">
+          <xhtml:legend>Input data</xhtml:legend>
+          <xhtml:div>
+            <xhtml:div data-parametername="PEPFOLD" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats=""/>
+            <xhtml:div data-parametername="iSeq" class="parameter &#10;&#9;&#9;&#9;&#9;mandatory&#10;&#9;&#9;&#9;&#9;" title="This parameter is mandatory" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="Sequence" data-datatype-superclass="" data-biotype="" data-card="" data-formats="FASTA ">
+              <xhtml:i>
+				(Sequence)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114763040::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114763040::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Use this input field to specify the amino acid sequence of the peptide. 
+              The FASTA format.s preferred Example: <xhtml:br/>
+              &gt;tau_fragment<xhtml:br/>
+              DNIKHVPGGGSVQIVYK<xhtml:br/>
+              However a raw format is also accepted:<xhtml:br/>
+	      DNIKHVPGGGSVQIVYK<xhtml:br/>
+              For more information about the format, please read the sequence format tutorial (Mobyle Tutorials section, on the left).
+              <xhtml:div class="remark">
+                    <xhtml:b>Note:</xhtml:b> Simulated sequence length must be comprised between 5 and 50 amino-acids.
+              </xhtml:div>
+              Choosing the db item, you can directly select the sequence of a PDB file specifying an identifier on the form: 1dep_A for chain A of the 1dep entry. The chain identifier is mandatory.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="joblabel" class="parameter &#10;&#9;&#9;&#9;&#9;mandatory&#10;&#9;&#9;&#9;&#9;" title="This parameter is mandatory" data-issimple="true" data-ismultiple="false" data-default-value="PEPFOLD" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114866192::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114866192::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              This label will correspond to the first field of the file names of the run, available for download.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </xhtml:fieldset>
+        <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="Options">
+          <xhtml:legend>3D generation options</xhtml:legend>
+          <xhtml:div>
+            <xhtml:div data-parametername="generator" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="fbt" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114409296::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114409296::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                Generator in use for the runs. 
+            </xhtml:div>
+                <xhtml:div>
+                Usually, the forward backtrack (fbt) is rather good, but taboo-sampling (ts3, ts4, ts5) can be a better option for peptides in interaction. ts5 should only be used for peptide sizes longer than 20 amino acids, and ts4 is not recommanded below 12 amino acids. 
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="nruns" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="100" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114491904::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114491904::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                Number of independent simulations to be run. 
+            </xhtml:div>
+                <xhtml:div>
+                Usually, 100 is enough to get a good idea of peptide candidate conformations. In some cases however, generating 200 models can lead to improvement. 
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="mcsteps" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="30000" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114815776::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114815776::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                The number of Monte Carlo steps. 30 000 is the default. Setting it to 0 will invalidate the Monte Carlo procedure, and return un-refined models.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="mcT" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="370" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114335920::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114335920::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                The  Monte Carlo temperature. 370K was found effective with PEP-FOLD4. 700K can be considered to force larger sampling during the Monte Carlo.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="seed" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="1" data-datatype="Integer" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114568336::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114568336::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                The pseudo random generator seed. PEP-FOLD is reproducible using the same seed with the same set of parameters. Negative values will trigger the use of a random seed value.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="probFile" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="_3DPatch" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="">
+              <xhtml:i>
+				(_3DPatch)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114452304::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114452304::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Entering the probabilities from a previous run with the same sequence will avoid redundant calculation of the probabilities and speed up the calculations. Warning: do not try to input irrelevant values as it will results in spurious models.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </xhtml:fieldset>
+        <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="Advanced_options">
+          <xhtml:legend>Debye-Huckel formalism</xhtml:legend>
+          <xhtml:div>
+            <xhtml:div data-parametername="DebyeHuckel" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="0" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114440608::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114440608::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                Trigger the use of Debye-Huckel contribution.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="DebyeHuckelWeight" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="1." data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873117202288::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873117202288::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                Trigger the use of Debye-Huckel contribution.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="pH" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="7." data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873117182016::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873117182016::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                The pH at which the simulation is run (only effective if Debye-Huckel in use).
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="ionicStr" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="1" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114590064::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114590064::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                The value of the ionic strenght assimilated to NaCl concentration (mM).
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="DHNeutralExt" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="None" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114468400::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114468400::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+                Trigger the neutralization of extremities (None means Nter and Cter are charged).
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="pKa" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="_3DPatch" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="">
+              <xhtml:i>
+				(_3DPatch)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114253552::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114253552::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              The pKa values must be specified ONE per line. Each line on the form: <xhtml:b>index pKa</xhtml:b>, where index is the position of the residue in the sequence (from 1).
+              <xhtml:div class="success">
+                    <xhtml:b>Example:</xhtml:b> 2 5.3
+              </xhtml:div>
+                </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </xhtml:fieldset>
+      </interface>
+      <interface type="job_output" generated="true">
+        <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml" class="minimizable" data-paragraphname="Output">
+          <xhtml:legend>Output</xhtml:legend>
+          <xhtml:div>
+            <xhtml:div data-parametername="htmlvisu" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="HTML" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="">
+              <xhtml:i>
+				(HTML)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114241024::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114241024::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              The visualization is based on top of the NGL Viewer (https://nglviewer.org/). Being JavaScript / WebGL based, the behavior still depends on the browser (but remains largely better than with JAVA based visualizers).
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="htmltable" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="HTML" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="">
+              <xhtml:i>
+				(HTML)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114233392::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114233392::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Cluster centroids are the models similar to other models of the cluster with the lowest sOPEP energy value.
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="bestmodels" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB ">
+              <xhtml:i>
+				(Protein _3DStructure)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114226128::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114226128::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              The 5 best models in one file (They correspond to the centroids of up to the 5 best clusters - see the clustering report)
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="model1" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB ">
+              <xhtml:i>
+				(Protein _3DStructure)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114217968::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114217968::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Cluster 1 best conformation (according to sort criterion - see the clustering report)
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="model2" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB ">
+              <xhtml:i>
+				(Protein _3DStructure)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114209840::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114209840::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Cluster 2 best conformation (according to sort criterion - see the clustering report)
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="model3" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB ">
+              <xhtml:i>
+				(Protein _3DStructure)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114201712::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114201712::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Cluster 3 best conformation (according to sort criterion - see the clustering report)
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="model4" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB ">
+              <xhtml:i>
+				(Protein _3DStructure)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114193584::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114193584::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Cluster 4 best conformation (according to sort criterion - see the clustering report)
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="model5" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB ">
+              <xhtml:i>
+				(Protein _3DStructure)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114185456::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114185456::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Cluster 5 best conformation (according to sort criterion - see the clustering report)
+            </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="PPP_png" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Picture" data-datatype-superclass="Binary" data-biotype="" data-card="" data-formats="">
+              <xhtml:a href="#idm139873114177328::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114177328::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Structural alphabet (SA) prediction profile.
+              The probabilities, at each position of the sequence, of the 27 SA letters are sorted from helical (red), coil (blue) to extended (green).
+              <xhtml:div class="remark">
+                    <xhtml:b>Note:</xhtml:b> SA letters are 4 residue length, so the profile is of the size of the amino acid sequence minus 3.
+              </xhtml:div>
+                </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+            <xhtml:div data-parametername="PPP_probs" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Text" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="">
+              <xhtml:i>
+				(Text)
+			</xhtml:i>
+              <xhtml:a href="#idm139873114107712::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</xhtml:a>
+              <xhtml:div id="idm139873114107712::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                <xhtml:div>
+              Structural alphabet (SA) prediction probabilities.
+              The probabilities, at each position of the sequence, of the 27 SA letters. You can save this file and input it for later runs on the same sequence, which will save calculation time.
+              <xhtml:div class="remark">
+                    <xhtml:b>Note:</xhtml:b> SA letters are 4 residue length, so the profile is of the size of the amino acid sequence minus 3.
+              </xhtml:div>
+                </xhtml:div>
+              </xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </xhtml:fieldset>
+        <div xmlns="http://www.w3.org/1999/xhtml" data-parametername="stdout" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Report" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+          <i>
+				(Report)
+			</i>
+        </div>
+        <div xmlns="http://www.w3.org/1999/xhtml" data-parametername="stderr" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Report" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+          <i>
+				(Report)
+			</i>
+        </div>
+      </interface>
+    </head>
+    <parameters>
+      <paragraph>
+        <name>demo_mode</name>
+        <prompt>Demonstration mode</prompt>
+        <parameters>
+          <parameter issimple="1">
+            <name>wmesg_demo</name>
+            <prompt lang="en"/>
+            <type>
+              <datatype>
+                <class>String</class>
+              </datatype>
+            </type>
+            <format>
+              <code proglang="python">""</code>
+            </format>
+            <interface type="form">
+              <div xmlns="http://www.w3.org/1999/xhtml">
+                <label class="parameter" title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">
+                Fill the service form with preset data
+              </label>
+                <input type="button" name="demo" value="Load"/>
+                <div class="remark">
+                  <b>Note:</b> PEP-FOLD4 will load a pre-configured test case. Click the "Reset" button above to reset the form.
+              </div>
+                <script>
+                $$('div[id^=\'ms-forms::\'].tabPanel').findAll(function(e){return e.visible()}).first().down('[name="demo"]').observe('click', function() {
+                    $$('div[id^=\'ms-forms::\'].tabPanel').findAll(function(e){return e.visible()}).first().down('[name="iSeq.mode"][value="paste"]').fire('databox:switch');
+                    $$('div[id^=\'ms-forms::\'].tabPanel').findAll(function(e){return e.visible()}).first().down('[name="iSeq"]').value=`&gt;tau_fragment
+DNIKHVPGGGSVQIVYK`;
+                    $$('[name="DebyeHuckel"] option')[1].selected=true;
+                    $$('[name="pH"] option')[10].selected=true;
+                    $$('[name="ionicStr"] option')[0].selected=true;
+                });
+              </script>
+              </div>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="wmesg_demo"/>
+            </interface>
+          </parameter>
+        </parameters>
+      </paragraph>
+      <paragraph>
+        <name>InputData</name>
+        <prompt>Input data</prompt>
+        <parameters>
+          <parameter ishidden="1">
+            <name>PEPFOLD</name>
+            <type>
+              <datatype>
+                <class>String</class>
+              </datatype>
+            </type>
+            <format>
+              <code proglang="python">" --maxSimSze 50 --maxSeqSze 50 --noMQA --sortKey sOPEP "</code>
+            </format>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="PEPFOLD"/>
+            </interface>
+          </parameter>
+          <parameter ismandatory="1" issimple="1">
+            <name>iSeq</name>
+            <prompt lang="en">Peptide amino acid sequence</prompt>
+            <type>
+              <datatype>
+                <class>Sequence</class>
+              </datatype>
+              <dataFormat>FASTA</dataFormat>
+            </type>
+            <format>
+              <code proglang="python">" -s %s " % str(iSeq)</code>
+            </format>
+            <comment>
+              <div xmlns="http://www.w3.org/1999/xhtml">
+              Use this input field to specify the amino acid sequence of the peptide. 
+              The FASTA format.s preferred Example: <br/>
+              &gt;tau_fragment<br/>
+              DNIKHVPGGGSVQIVYK<br/>
+              However a raw format is also accepted:<br/>
+	      DNIKHVPGGGSVQIVYK<br/>
+              For more information about the format, please read the sequence format tutorial (Mobyle Tutorials section, on the left).
+              <div class="remark">
+                  <b>Note:</b> Simulated sequence length must be comprised between 5 and 50 amino-acids.
+              </div>
+              Choosing the db item, you can directly select the sequence of a PDB file specifying an identifier on the form: 1dep_A for chain A of the 1dep entry. The chain identifier is mandatory.
+            </div>
+            </comment>
+            <interface type="form" generated="true">
+              <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                <xhtml:legend>Peptide amino acid sequence</xhtml:legend>
+                <xhtml:textarea name="iSeq" cols="60" rows="7"> </xhtml:textarea>
+              </xhtml:fieldset>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter &#10;&#9;&#9;&#9;&#9;mandatory&#10;&#9;&#9;&#9;&#9;" title="This parameter is mandatory" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="Sequence" data-datatype-superclass="" data-biotype="" data-card="" data-formats="FASTA " data-parametername="iSeq">
+                <i>
+				(Sequence)
+			</i>
+                <a href="#idm139873114763040::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114763040::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Use this input field to specify the amino acid sequence of the peptide. 
+              The FASTA format.s preferred Example: <br/>
+              &gt;tau_fragment<br/>
+              DNIKHVPGGGSVQIVYK<br/>
+              However a raw format is also accepted:<br/>
+	      DNIKHVPGGGSVQIVYK<br/>
+              For more information about the format, please read the sequence format tutorial (Mobyle Tutorials section, on the left).
+              <div class="remark">
+                      <b>Note:</b> Simulated sequence length must be comprised between 5 and 50 amino-acids.
+              </div>
+              Choosing the db item, you can directly select the sequence of a PDB file specifying an identifier on the form: 1dep_A for chain A of the 1dep entry. The chain identifier is mandatory.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter ismandatory="1" issimple="1">
+            <name>joblabel</name>
+            <prompt lang="en">Run label</prompt>
+            <type>
+              <datatype>
+                <class>String</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>PEPFOLD</value>
+            </vdef>
+            <comment>
+              <text lang="en">
+              This label will correspond to the first field of the file names of the run, available for download.
+            </text>
+            </comment>
+            <format>
+              <code proglang="python">" -l %s " % str(joblabel)</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Run label<a href="#idm139873114866192::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <input name="joblabel" type="text" value="PEPFOLD"/>
+                <div id="idm139873114866192::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              This label will correspond to the first field of the file names of the run, available for download.
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter &#10;&#9;&#9;&#9;&#9;mandatory&#10;&#9;&#9;&#9;&#9;" title="This parameter is mandatory" data-issimple="true" data-ismultiple="false" data-default-value="PEPFOLD" data-datatype="String" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="joblabel">
+                <a href="#idm139873114866192::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114866192::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              This label will correspond to the first field of the file names of the run, available for download.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+        </parameters>
+      </paragraph>
+      <paragraph>
+        <name>Options</name>
+        <prompt>3D generation options</prompt>
+        <parameters>
+          <parameter issimple="1">
+            <name>generator</name>
+            <prompt lang="en">Generator</prompt>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>fbt</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>fbt</value>
+                <label>fbt</label>
+              </velem>
+              <velem>
+                <value>ts3</value>
+                <label>ts3</label>
+              </velem>
+              <velem>
+                <value>ts4</value>
+                <label>ts4</label>
+              </velem>
+              <velem>
+                <value>ts5</value>
+                <label>ts5</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">" --generator %s " % value</code>
+            </format>
+            <comment>
+              <text lang="en">
+                Generator in use for the runs. 
+            </text>
+              <text lang="en">
+                Usually, the forward backtrack (fbt) is rather good, but taboo-sampling (ts3, ts4, ts5) can be a better option for peptides in interaction. ts5 should only be used for peptide sizes longer than 20 amino acids, and ts4 is not recommanded below 12 amino acids. 
+            </text>
+            </comment>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Generator<a href="#idm139873114409296::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="generator">
+                  <option value="fbt" selected="selected">fbt</option>
+                  <option value="ts3">ts3</option>
+                  <option value="ts4">ts4</option>
+                  <option value="ts5">ts5</option>
+                </select>
+                <div id="idm139873114409296::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Generator in use for the runs. 
+            </div>
+                  <div>
+                Usually, the forward backtrack (fbt) is rather good, but taboo-sampling (ts3, ts4, ts5) can be a better option for peptides in interaction. ts5 should only be used for peptide sizes longer than 20 amino acids, and ts4 is not recommanded below 12 amino acids. 
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="fbt" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="generator">
+                <a href="#idm139873114409296::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114409296::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Generator in use for the runs. 
+            </div>
+                  <div>
+                Usually, the forward backtrack (fbt) is rather good, but taboo-sampling (ts3, ts4, ts5) can be a better option for peptides in interaction. ts5 should only be used for peptide sizes longer than 20 amino acids, and ts4 is not recommanded below 12 amino acids. 
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>nruns</name>
+            <prompt lang="en">Number of models</prompt>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>100</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>100</value>
+                <label>100</label>
+              </velem>
+              <velem>
+                <value>200</value>
+                <label>200</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">" --nRuns %s " % value</code>
+            </format>
+            <comment>
+              <text lang="en">
+                Number of independent simulations to be run. 
+            </text>
+              <text lang="en">
+                Usually, 100 is enough to get a good idea of peptide candidate conformations. In some cases however, generating 200 models can lead to improvement. 
+            </text>
+            </comment>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Number of models<a href="#idm139873114491904::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="nruns">
+                  <option value="100" selected="selected">100</option>
+                  <option value="200">200</option>
+                </select>
+                <div id="idm139873114491904::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Number of independent simulations to be run. 
+            </div>
+                  <div>
+                Usually, 100 is enough to get a good idea of peptide candidate conformations. In some cases however, generating 200 models can lead to improvement. 
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="100" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="nruns">
+                <a href="#idm139873114491904::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114491904::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Number of independent simulations to be run. 
+            </div>
+                  <div>
+                Usually, 100 is enough to get a good idea of peptide candidate conformations. In some cases however, generating 200 models can lead to improvement. 
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>mcsteps</name>
+            <prompt lang="en">Monte Carlo steps</prompt>
+            <comment>
+              <text lang="en">
+                The number of Monte Carlo steps. 30 000 is the default. Setting it to 0 will invalidate the Monte Carlo procedure, and return un-refined models.
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>30000</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>30000</value>
+                <label>30000</label>
+              </velem>
+              <velem>
+                <value>0</value>
+                <label>0</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">" --mcSteps %s " % value</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Monte Carlo steps<a href="#idm139873114815776::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="mcsteps">
+                  <option value="30000" selected="selected">30000</option>
+                  <option value="0">0</option>
+                </select>
+                <div id="idm139873114815776::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The number of Monte Carlo steps. 30 000 is the default. Setting it to 0 will invalidate the Monte Carlo procedure, and return un-refined models.
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="30000" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="mcsteps">
+                <a href="#idm139873114815776::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114815776::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The number of Monte Carlo steps. 30 000 is the default. Setting it to 0 will invalidate the Monte Carlo procedure, and return un-refined models.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>mcT</name>
+            <prompt lang="en">Monte Carlo temperature</prompt>
+            <comment>
+              <text lang="en">
+                The  Monte Carlo temperature. 370K was found effective with PEP-FOLD4. 700K can be considered to force larger sampling during the Monte Carlo.
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>370</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>370</value>
+                <label>370</label>
+              </velem>
+              <velem>
+                <value>700</value>
+                <label>700</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">" --mcT %s " % value</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Monte Carlo temperature<a href="#idm139873114335920::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="mcT">
+                  <option value="370" selected="selected">370</option>
+                  <option value="700">700</option>
+                </select>
+                <div id="idm139873114335920::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The  Monte Carlo temperature. 370K was found effective with PEP-FOLD4. 700K can be considered to force larger sampling during the Monte Carlo.
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="370" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="mcT">
+                <a href="#idm139873114335920::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114335920::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The  Monte Carlo temperature. 370K was found effective with PEP-FOLD4. 700K can be considered to force larger sampling during the Monte Carlo.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>seed</name>
+            <prompt lang="en">Pseudo-random seed</prompt>
+            <comment>
+              <text lang="en">
+                The pseudo random generator seed. PEP-FOLD is reproducible using the same seed with the same set of parameters. Negative values will trigger the use of a random seed value.
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Integer</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>1</value>
+            </vdef>
+            <format>
+              <code proglang="python">" --seed %s " % value</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Pseudo-random seed<a href="#idm139873114568336::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <input name="seed" type="text" value="1"/>
+                <div id="idm139873114568336::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The pseudo random generator seed. PEP-FOLD is reproducible using the same seed with the same set of parameters. Negative values will trigger the use of a random seed value.
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="1" data-datatype="Integer" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="seed">
+                <a href="#idm139873114568336::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114568336::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The pseudo random generator seed. PEP-FOLD is reproducible using the same seed with the same set of parameters. Negative values will trigger the use of a random seed value.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>probFile</name>
+            <prompt lang="en">Probabilities from a previous run</prompt>
+            <comment>
+              <text lang="en">
+              Entering the probabilities from a previous run with the same sequence will avoid redundant calculation of the probabilities and speed up the calculations. Warning: do not try to input irrelevant values as it will results in spurious models.
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>_3DPatch</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+            </type>
+            <format>
+              <code proglang="python">("", " --iPrf " + str(probFile) + "")[probFile is not None]</code>
+            </format>
+            <interface type="form" generated="true">
+              <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                <xhtml:legend>Probabilities from a previous run</xhtml:legend>
+                <xhtml:textarea name="probFile" cols="60" rows="7"> </xhtml:textarea>
+              </xhtml:fieldset>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="_3DPatch" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="" data-parametername="probFile">
+                <i>
+				(_3DPatch)
+			</i>
+                <a href="#idm139873114452304::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114452304::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Entering the probabilities from a previous run with the same sequence will avoid redundant calculation of the probabilities and speed up the calculations. Warning: do not try to input irrelevant values as it will results in spurious models.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+        </parameters>
+      </paragraph>
+      <paragraph>
+        <name>Advanced_options</name>
+        <prompt>Debye-Huckel formalism</prompt>
+        <parameters>
+          <parameter issimple="1">
+            <name>DebyeHuckel</name>
+            <prompt lang="en">Use Debye-Huckel contribution</prompt>
+            <comment>
+              <text lang="en">
+                Trigger the use of Debye-Huckel contribution.
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>0</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>0</value>
+                <label>No</label>
+              </velem>
+              <velem>
+                <value>1</value>
+                <label>Yes</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">(""," --use_DH ")[int(value)]</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Use Debye-Huckel contribution<a href="#idm139873114440608::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="DebyeHuckel">
+                  <option value="0" selected="selected">No</option>
+                  <option value="1">Yes</option>
+                </select>
+                <div id="idm139873114440608::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Trigger the use of Debye-Huckel contribution.
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="0" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="DebyeHuckel">
+                <a href="#idm139873114440608::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114440608::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Trigger the use of Debye-Huckel contribution.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter ishidden="1">
+            <name>DebyeHuckelWeight</name>
+            <prompt lang="en">Weight of Debye-Huckel contribution</prompt>
+            <comment>
+              <text lang="en">
+                Trigger the use of Debye-Huckel contribution.
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>1.</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>0.1</value>
+                <label>0.1</label>
+              </velem>
+              <velem>
+                <value>0.2</value>
+                <label>0.2</label>
+              </velem>
+              <velem>
+                <value>0.5</value>
+                <label>0.5</label>
+              </velem>
+              <velem>
+                <value>0.75</value>
+                <label>0.75</label>
+              </velem>
+              <velem>
+                <value>1.</value>
+                <label>1.</label>
+              </velem>
+              <velem>
+                <value>1.5</value>
+                <label>1.5</label>
+              </velem>
+              <velem>
+                <value>2.</value>
+                <label>2.</label>
+              </velem>
+              <velem>
+                <value>5.</value>
+                <label>5.</label>
+              </velem>
+              <velem>
+                <value>10.</value>
+                <label>10.</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">("", " --wDH %s " % value)[int(DebyeHuckel)]</code>
+            </format>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="1." data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="DebyeHuckelWeight">
+                <a href="#idm139873117202288::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873117202288::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Trigger the use of Debye-Huckel contribution.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>pH</name>
+            <prompt lang="en">Solvent pH</prompt>
+            <comment>
+              <text lang="en">
+                The pH at which the simulation is run (only effective if Debye-Huckel in use).
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>7.</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>2</value>
+                <label>2</label>
+              </velem>
+              <velem>
+                <value>2.5</value>
+                <label>2.5</label>
+              </velem>
+              <velem>
+                <value>3</value>
+                <label>3</label>
+              </velem>
+              <velem>
+                <value>3.5</value>
+                <label>3.5</label>
+              </velem>
+              <velem>
+                <value>4</value>
+                <label>4</label>
+              </velem>
+              <velem>
+                <value>4.5</value>
+                <label>4.5</label>
+              </velem>
+              <velem>
+                <value>5.</value>
+                <label>5.</label>
+              </velem>
+              <velem>
+                <value>5.5</value>
+                <label>5.5</label>
+              </velem>
+              <velem>
+                <value>6.</value>
+                <label>6.</label>
+              </velem>
+              <velem>
+                <value>6.5</value>
+                <label>6.5</label>
+              </velem>
+              <velem>
+                <value>7.</value>
+                <label>7.</label>
+              </velem>
+              <velem>
+                <value>7.5</value>
+                <label>7.5</label>
+              </velem>
+              <velem>
+                <value>8.</value>
+                <label>8.</label>
+              </velem>
+              <velem>
+                <value>8.5</value>
+                <label>8.5</label>
+              </velem>
+              <velem>
+                <value>9.</value>
+                <label>9.</label>
+              </velem>
+              <velem>
+                <value>9.5</value>
+                <label>9.5</label>
+              </velem>
+              <velem>
+                <value>10.</value>
+                <label>10.</label>
+              </velem>
+              <velem>
+                <value>10.5</value>
+                <label>10.5</label>
+              </velem>
+              <velem>
+                <value>11.</value>
+                <label>11.</label>
+              </velem>
+              <velem>
+                <value>11.5</value>
+                <label>11.5</label>
+              </velem>
+              <velem>
+                <value>12.</value>
+                <label>12.</label>
+              </velem>
+              <velem>
+                <value>12.5</value>
+                <label>12.5</label>
+              </velem>
+              <velem>
+                <value>13</value>
+                <label>13</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">("", " --pH %s " % value)[int(DebyeHuckel)]</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Solvent pH<a href="#idm139873117182016::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="pH">
+                  <option value="2">2</option>
+                  <option value="2.5">2.5</option>
+                  <option value="3">3</option>
+                  <option value="3.5">3.5</option>
+                  <option value="4">4</option>
+                  <option value="4.5">4.5</option>
+                  <option value="5.">5.</option>
+                  <option value="5.5">5.5</option>
+                  <option value="6.">6.</option>
+                  <option value="6.5">6.5</option>
+                  <option value="7." selected="selected">7.</option>
+                  <option value="7.5">7.5</option>
+                  <option value="8.">8.</option>
+                  <option value="8.5">8.5</option>
+                  <option value="9.">9.</option>
+                  <option value="9.5">9.5</option>
+                  <option value="10.">10.</option>
+                  <option value="10.5">10.5</option>
+                  <option value="11.">11.</option>
+                  <option value="11.5">11.5</option>
+                  <option value="12.">12.</option>
+                  <option value="12.5">12.5</option>
+                  <option value="13">13</option>
+                </select>
+                <div id="idm139873117182016::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The pH at which the simulation is run (only effective if Debye-Huckel in use).
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="7." data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="pH">
+                <a href="#idm139873117182016::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873117182016::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The pH at which the simulation is run (only effective if Debye-Huckel in use).
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>ionicStr</name>
+            <prompt lang="en">Ionic strength (mM)</prompt>
+            <comment>
+              <text lang="en">
+                The value of the ionic strenght assimilated to NaCl concentration (mM).
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>1</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>1</value>
+                <label>1</label>
+              </velem>
+              <velem>
+                <value>10</value>
+                <label>10</label>
+              </velem>
+              <velem>
+                <value>20</value>
+                <label>20</label>
+              </velem>
+              <velem>
+                <value>50</value>
+                <label>50</label>
+              </velem>
+              <velem>
+                <value>100</value>
+                <label>100</label>
+              </velem>
+              <velem>
+                <value>150</value>
+                <label>150</label>
+              </velem>
+              <velem>
+                <value>200</value>
+                <label>200</label>
+              </velem>
+              <velem>
+                <value>300</value>
+                <label>300</label>
+              </velem>
+              <velem>
+                <value>500</value>
+                <label>500</label>
+              </velem>
+              <velem>
+                <value>1000</value>
+                <label>1000</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">("", " --ionic_strength %s " % value)[int(DebyeHuckel)]</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Ionic strength (mM)<a href="#idm139873114590064::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="ionicStr">
+                  <option value="1" selected="selected">1</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="150">150</option>
+                  <option value="200">200</option>
+                  <option value="300">300</option>
+                  <option value="500">500</option>
+                  <option value="1000">1000</option>
+                </select>
+                <div id="idm139873114590064::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The value of the ionic strenght assimilated to NaCl concentration (mM).
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="1" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="ionicStr">
+                <a href="#idm139873114590064::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114590064::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                The value of the ionic strenght assimilated to NaCl concentration (mM).
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>DHNeutralExt</name>
+            <prompt lang="en">Block extremities</prompt>
+            <comment>
+              <text lang="en">
+                Trigger the neutralization of extremities (None means Nter and Cter are charged).
+            </text>
+            </comment>
+            <type>
+              <datatype>
+                <class>Choice</class>
+              </datatype>
+            </type>
+            <vdef>
+              <value>None</value>
+            </vdef>
+            <vlist>
+              <velem>
+                <value>None</value>
+                <label>None</label>
+              </velem>
+              <velem>
+                <value>Both</value>
+                <label>Both</label>
+              </velem>
+              <velem>
+                <value>Nter</value>
+                <label>Nter</label>
+              </velem>
+              <velem>
+                <value>Cter</value>
+                <label>Cter</label>
+              </velem>
+            </vlist>
+            <format>
+              <code proglang="python">("", " --neutral_ext  %s " % value)[int(DebyeHuckel)]</code>
+            </format>
+            <interface type="form" generated="true">
+              <label xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="" data-datatype-superclass="" data-biotype="" data-card="" data-formats="">Block extremities<a href="#idm139873114468400::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <select name="DHNeutralExt">
+                  <option value="None" selected="selected">None</option>
+                  <option value="Both">Both</option>
+                  <option value="Nter">Nter</option>
+                  <option value="Cter">Cter</option>
+                </select>
+                <div id="idm139873114468400::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Trigger the neutralization of extremities (None means Nter and Cter are charged).
+            </div>
+                </div>
+              </label>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="None" data-datatype="Choice" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="DHNeutralExt">
+                <a href="#idm139873114468400::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114468400::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+                Trigger the neutralization of extremities (None means Nter and Cter are charged).
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter issimple="1">
+            <name>pKa</name>
+            <prompt lang="en">Non standard pKa values for specific residues (ONE per line)</prompt>
+            <comment>
+              <div xmlns="http://www.w3.org/1999/xhtml">
+              The pKa values must be specified ONE per line. Each line on the form: <b>index pKa</b>, where index is the position of the residue in the sequence (from 1).
+              <div class="success">
+                  <b>Example:</b> 2 5.3
+              </div>
+              </div>
+            </comment>
+            <type>
+              <datatype>
+                <class>_3DPatch</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+            </type>
+            <format>
+              <code proglang="python">("", " --user_pKa " + str(pKa) + "")[pKa is not None]</code>
+            </format>
+            <interface type="form" generated="true">
+              <xhtml:fieldset xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                <xhtml:legend>Non standard pKa values for specific residues (ONE per line)</xhtml:legend>
+                <xhtml:textarea name="pKa" cols="60" rows="7"> </xhtml:textarea>
+              </xhtml:fieldset>
+            </interface>
+            <interface generated="true" type="job_input">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="true" data-ismultiple="false" data-default-value="" data-datatype="_3DPatch" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="" data-parametername="pKa">
+                <i>
+				(_3DPatch)
+			</i>
+                <a href="#idm139873114253552::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114253552::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              The pKa values must be specified ONE per line. Each line on the form: <b>index pKa</b>, where index is the position of the residue in the sequence (from 1).
+              <div class="success">
+                      <b>Example:</b> 2 5.3
+              </div>
+                  </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+        </parameters>
+      </paragraph>
+      <paragraph>
+        <name>Output</name>
+        <prompt>Output</prompt>
+        <parameters>
+          <parameter isout="1">
+            <name>htmlvisu</name>
+            <prompt lang="en">Visualize the best models</prompt>
+            <type>
+              <datatype>
+                <class>HTML</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+            </type>
+            <filenames>
+              <code proglang="python">"bestModels.html"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              The visualization is based on top of the NGL Viewer (https://nglviewer.org/). Being JavaScript / WebGL based, the behavior still depends on the browser (but remains largely better than with JAVA based visualizers).
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="HTML" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="" data-parametername="htmlvisu">
+                <i>
+				(HTML)
+			</i>
+                <a href="#idm139873114241024::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114241024::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              The visualization is based on top of the NGL Viewer (https://nglviewer.org/). Being JavaScript / WebGL based, the behavior still depends on the browser (but remains largely better than with JAVA based visualizers).
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>htmltable</name>
+            <prompt lang="en">Access all the models generated</prompt>
+            <type>
+              <datatype>
+                <class>HTML</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+            </type>
+            <filenames>
+              <code proglang="python">"clusters.html"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              Cluster centroids are the models similar to other models of the cluster with the lowest sOPEP energy value.
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="HTML" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="" data-parametername="htmltable">
+                <i>
+				(HTML)
+			</i>
+                <a href="#idm139873114233392::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114233392::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Cluster centroids are the models similar to other models of the cluster with the lowest sOPEP energy value.
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>bestmodels</name>
+            <prompt lang="en">5 best Models</prompt>
+            <type>
+              <biotype>Protein</biotype>
+              <datatype>
+                <class>_3DStructure</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+              <dataFormat>PDB</dataFormat>
+            </type>
+            <filenames>
+              <code proglang="python">"*-5bestmodels.pdb"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              The 5 best models in one file (They correspond to the centroids of up to the 5 best clusters - see the clustering report)
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB " data-parametername="bestmodels">
+                <i>
+				(Protein _3DStructure)
+			</i>
+                <a href="#idm139873114226128::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114226128::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              The 5 best models in one file (They correspond to the centroids of up to the 5 best clusters - see the clustering report)
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>model1</name>
+            <prompt lang="en">Model 1</prompt>
+            <type>
+              <biotype>Protein</biotype>
+              <datatype>
+                <class>_3DStructure</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+              <dataFormat>PDB</dataFormat>
+            </type>
+            <filenames>
+              <code proglang="python">"*-model1.pdb"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              Cluster 1 best conformation (according to sort criterion - see the clustering report)
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB " data-parametername="model1">
+                <i>
+				(Protein _3DStructure)
+			</i>
+                <a href="#idm139873114217968::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114217968::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Cluster 1 best conformation (according to sort criterion - see the clustering report)
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>model2</name>
+            <prompt lang="en">Model 2</prompt>
+            <type>
+              <biotype>Protein</biotype>
+              <datatype>
+                <class>_3DStructure</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+              <dataFormat>PDB</dataFormat>
+            </type>
+            <filenames>
+              <code proglang="python">"*-model2.pdb"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              Cluster 2 best conformation (according to sort criterion - see the clustering report)
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB " data-parametername="model2">
+                <i>
+				(Protein _3DStructure)
+			</i>
+                <a href="#idm139873114209840::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114209840::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Cluster 2 best conformation (according to sort criterion - see the clustering report)
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>model3</name>
+            <prompt lang="en">Model 3</prompt>
+            <type>
+              <biotype>Protein</biotype>
+              <datatype>
+                <class>_3DStructure</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+              <dataFormat>PDB</dataFormat>
+            </type>
+            <filenames>
+              <code proglang="python">"*-model3.pdb"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              Cluster 3 best conformation (according to sort criterion - see the clustering report)
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB " data-parametername="model3">
+                <i>
+				(Protein _3DStructure)
+			</i>
+                <a href="#idm139873114201712::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114201712::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Cluster 3 best conformation (according to sort criterion - see the clustering report)
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>model4</name>
+            <prompt lang="en">Model 4</prompt>
+            <type>
+              <biotype>Protein</biotype>
+              <datatype>
+                <class>_3DStructure</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+              <dataFormat>PDB</dataFormat>
+            </type>
+            <filenames>
+              <code proglang="python">"*-model4.pdb"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              Cluster 4 best conformation (according to sort criterion - see the clustering report)
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB " data-parametername="model4">
+                <i>
+				(Protein _3DStructure)
+			</i>
+                <a href="#idm139873114193584::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114193584::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Cluster 4 best conformation (according to sort criterion - see the clustering report)
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>model5</name>
+            <prompt lang="en">Model 5</prompt>
+            <type>
+              <biotype>Protein</biotype>
+              <datatype>
+                <class>_3DStructure</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+              <dataFormat>PDB</dataFormat>
+            </type>
+            <filenames>
+              <code proglang="python">"*-model5.pdb"</code>
+            </filenames>
+            <comment>
+              <text lang="en">
+              Cluster 5 best conformation (according to sort criterion - see the clustering report)
+            </text>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="_3DStructure" data-datatype-superclass="AbstractText" data-biotype="Protein " data-card="" data-formats="PDB " data-parametername="model5">
+                <i>
+				(Protein _3DStructure)
+			</i>
+                <a href="#idm139873114185456::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114185456::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Cluster 5 best conformation (according to sort criterion - see the clustering report)
+            </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>PPP_png</name>
+            <prompt lang="en">Predicted Local Structure Profile</prompt>
+            <type>
+              <datatype>
+                <class>Picture</class>
+                <superclass>Binary</superclass>
+              </datatype>
+            </type>
+            <filenames>
+              <code proglang="python">"*.svmi8.27.prob.probplot.27.png"</code>
+            </filenames>
+            <comment>
+              <div xmlns="http://www.w3.org/1999/xhtml">
+              Structural alphabet (SA) prediction profile.
+              The probabilities, at each position of the sequence, of the 27 SA letters are sorted from helical (red), coil (blue) to extended (green).
+              <div class="remark">
+                  <b>Note:</b> SA letters are 4 residue length, so the profile is of the size of the amino acid sequence minus 3.
+              </div>
+              </div>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Picture" data-datatype-superclass="Binary" data-biotype="" data-card="" data-formats="" data-parametername="PPP_png">
+                <a href="#idm139873114177328::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114177328::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Structural alphabet (SA) prediction profile.
+              The probabilities, at each position of the sequence, of the 27 SA letters are sorted from helical (red), coil (blue) to extended (green).
+              <div class="remark">
+                      <b>Note:</b> SA letters are 4 residue length, so the profile is of the size of the amino acid sequence minus 3.
+              </div>
+                  </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+          <parameter isout="1">
+            <name>PPP_probs</name>
+            <prompt lang="en">Predicted Local Structure Probabilities</prompt>
+            <type>
+              <datatype>
+                <class>Text</class>
+                <superclass>AbstractText</superclass>
+              </datatype>
+            </type>
+            <filenames>
+              <code proglang="python">"*.svmi8.27.prob"</code>
+            </filenames>
+            <comment>
+              <div xmlns="http://www.w3.org/1999/xhtml">
+              Structural alphabet (SA) prediction probabilities.
+              The probabilities, at each position of the sequence, of the 27 SA letters. You can save this file and input it for later runs on the same sequence, which will save calculation time.
+              <div class="remark">
+                  <b>Note:</b> SA letters are 4 residue length, so the profile is of the size of the amino acid sequence minus 3.
+              </div>
+              </div>
+            </comment>
+            <interface generated="true" type="job_output">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Text" data-datatype-superclass="AbstractText" data-biotype="" data-card="" data-formats="" data-parametername="PPP_probs">
+                <i>
+				(Text)
+			</i>
+                <a href="#idm139873114107712::comment" class="blindLink commentToggle" onclick="if (typeof portal=='undefined'){var target=document.getElementById(this.getAttribute('href').substr(1)); target.style.display=(target.style.display=='none') ? '':'none';}" title="click to expand/collapse contextual help">?</a>
+                <div id="idm139873114107712::comment" class="commentText" style="display:none" mode="ajaxTarget">
+                  <div>
+              Structural alphabet (SA) prediction probabilities.
+              The probabilities, at each position of the sequence, of the 27 SA letters. You can save this file and input it for later runs on the same sequence, which will save calculation time.
+              <div class="remark">
+                      <b>Note:</b> SA letters are 4 residue length, so the profile is of the size of the amino acid sequence minus 3.
+              </div>
+                  </div>
+                </div>
+              </div>
+            </interface>
+          </parameter>
+        </parameters>
+      </paragraph>
+      <parameter isstdout="true">
+        <name>stdout</name>
+        <prompt>Standard output</prompt>
+        <type>
+          <datatype>
+            <class>Report</class>
+          </datatype>
+        </type>
+        <filenames>
+          <code proglang="perl">"PEP-FOLD3.out"</code>
+          <code proglang="python">"PEP-FOLD3.out"</code>
+        </filenames>
+        <interface generated="true" type="job_output">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Report" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="stdout">
+            <i>
+				(Report)
+			</i>
+          </div>
+        </interface>
+      </parameter>
+      <parameter isout="true">
+        <name>stderr</name>
+        <prompt>Standard error</prompt>
+        <type>
+          <datatype>
+            <class>Report</class>
+          </datatype>
+        </type>
+        <filenames>
+          <code proglang="perl">"PEP-FOLD3.err"</code>
+          <code proglang="python">"PEP-FOLD3.err"</code>
+        </filenames>
+        <interface generated="true" type="job_output">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="parameter " title="" data-issimple="false" data-ismultiple="false" data-default-value="" data-datatype="Report" data-datatype-superclass="" data-biotype="" data-card="" data-formats="" data-parametername="stderr">
+            <i>
+				(Report)
+			</i>
+          </div>
+        </interface>
+      </parameter>
+    </parameters>
+  </program>
+  <name>https://mobyle2.rpbs.univ-paris-diderot.fr/data/services/servers/local/programs/PEP-FOLD4.xml</name>
+  <host>https://mobyle2.rpbs.univ-paris-diderot.fr</host>
+  <id>https://mobyle2.rpbs.univ-paris-diderot.fr/data/jobs/PEP-FOLD4/O16302238809109</id>
+  <date>09/28/25  23:52:24</date>
+  <sessionKey>S10791519176006</sessionKey>
+  <data>
+    <input>
+      <parameter>
+        <name>iSeq</name>
+      </parameter>
+      <file>
+        <raw fmt="FASTA" size="14">iSeq.data</raw>
+        <fmtProgram>squizz</fmtProgram>
+      </file>
+    </input>
+    <input>
+      <parameter>
+        <name>DebyeHuckel</name>
+      </parameter>
+      <value>1</value>
+    </input>
+    <input>
+      <parameter>
+        <name>pH</name>
+      </parameter>
+      <value>3</value>
+    </input>
+    <input>
+      <parameter>
+        <name>DHNeutralExt</name>
+      </parameter>
+      <value>Both</value>
+    </input>
+    <output>
+      <parameter>
+        <name>model2</name>
+      </parameter>
+      <file size="3710">PEPFOLD-model2.pdb</file>
+    </output>
+    <output>
+      <parameter>
+        <name>model1</name>
+      </parameter>
+      <file size="3710">PEPFOLD-model1.pdb</file>
+    </output>
+    <output>
+      <parameter>
+        <name>PPP_png</name>
+      </parameter>
+      <file size="5941">PEPFOLD.svmi8.27.prob.probplot.27.png</file>
+    </output>
+    <output>
+      <parameter>
+        <name>htmltable</name>
+      </parameter>
+      <file size="11651">clusters.html</file>
+    </output>
+    <output>
+      <parameter>
+        <name>bestmodels</name>
+      </parameter>
+      <file size="6974">PEPFOLD-5bestmodels.pdb</file>
+    </output>
+    <output>
+      <parameter>
+        <name>htmlvisu</name>
+      </parameter>
+      <file size="8481">bestModels.html</file>
+    </output>
+    <output>
+      <parameter>
+        <name>stderr</name>
+      </parameter>
+      <file size="497">PEP-FOLD4.err</file>
+    </output>
+    <output>
+      <parameter>
+        <name>PPP_probs</name>
+      </parameter>
+      <file size="732">PEPFOLD.svmi8.27.prob</file>
+    </output>
+  </data>
+  <commandLine>pep-fold4.py --maxSimSze 50 --maxSeqSze 50 --noMQA --sortKey sOPEP -s iSeq.data -l PEPFOLD --generator fbt --nRuns 100 --mcSteps 30000 --mcT 370 --seed 1 --use_DH --wDH 1. --pH 3 --ionic_strength 1 --neutral_ext Both</commandLine>
+  <status>
+    <value>finished</value>
+    <message/>
+  </status>
+</jobState>
