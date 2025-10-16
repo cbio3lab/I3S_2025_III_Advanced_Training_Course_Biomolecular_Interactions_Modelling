@@ -1,0 +1,2 @@
+PyPPP3Exec -s iSeq.data -l PEPFOLD -v --2012
+CppBuilder --objective sopep --action pepbuild --generator fbt --iPrf PEPFOLD.svmi8.27.prob --iSeq PEPFOLD.seq --label PEPFOLD --rndFrom 100 --heapSze 300 --mcSteps 30000 --mcT 370.000000 --nc 32 --nSim 100 --prfFilter none --ts_sze 5 --aa_models --iW NONE --sOPEP_version 2 --noTabEne --seed 1 --sOPEP_use_DH --unbias --sOPEPwDH 1.000000 --sOPEPpH 3.000000 --sOPEPionicstr 1.000000 --sOPEPneutral_ext --add_ace --add_nh2 --sOPEP_DH_user_pKa_file None

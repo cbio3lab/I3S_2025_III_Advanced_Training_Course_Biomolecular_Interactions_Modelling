@@ -1,0 +1,69 @@
+HEADER  PEPFOLD-00098_bestene1-mc.pdb
+REMARK  Component boundaries: 0: 1 6 
+
+REMARK  SA Trajectory: PPN
+REMARK     eCACA      eDH      eHb  ePhiPos eVdWBBBB eVdWBBSC eVdWSCSC    Total 
+REMARK    -0.017    0.000   -0.000    0.000   -0.104    0.011   -1.976   -2.085
+REMARK   sOPEP Energy: -2.08541
+MODEL        1         
+ATOM      0  C   ACE A   0       5.458  45.696  12.499
+ATOM      1  O   ACE A   0       4.366  45.711  13.056
+ATOM      2  CH3 ACE A   0       5.938  44.461  11.751
+ATOM      0  N   LYS A   1       6.284  46.709  12.665
+ATOM      1  CA  LYS A   1       7.544  46.823  11.887
+ATOM      2  C   LYS A   1       8.721  47.162  12.796
+ATOM      3  O   LYS A   1       8.591  47.937  13.767
+ATOM      4  H   LYS A   1       6.103  47.603  13.109
+ATOM      5  CB  LYS A   1       7.388  47.934  10.832
+ATOM      6  CG  LYS A   1       6.412  47.544   9.734
+ATOM      7  CD  LYS A   1       6.276  48.630   8.680
+ATOM      8  CE  LYS A   1       5.300  48.240   7.582
+ATOM      9  NZ  LYS A   1       5.167  49.298   6.556
+ATOM      0  N   ILE A   2       9.887  46.611  12.465
+ATOM      1  CA  ILE A   2      11.086  46.804  13.280
+ATOM      2  C   ILE A   2      12.291  47.056  12.385
+ATOM      3  O   ILE A   2      12.378  46.525  11.260
+ATOM      4  H   ILE A   2       9.944  46.064  11.657
+ATOM      5  CB  ILE A   2      11.337  45.542  14.127
+ATOM      6  CG1 ILE A   2      11.603  44.320  13.262
+ATOM      7  CD  ILE A   2      12.025  43.148  14.134
+ATOM      8  CG2 ILE A   2      10.127  45.252  15.000
+ATOM      0  N   ILE A   3      13.232  47.853  12.877
+ATOM      1  CA  ILE A   3      14.572  47.934  12.283
+ATOM      2  C   ILE A   3      15.383  46.887  13.022
+ATOM      3  O   ILE A   3      15.771  47.090  14.184
+ATOM      4  H   ILE A   3      13.027  48.403  13.659
+ATOM      5  CB  ILE A   3      15.177  49.334  12.492
+ATOM      6  CG1 ILE A   3      15.176  49.743  13.956
+ATOM      7  CD  ILE A   3      13.891  50.485  14.288
+ATOM      8  CG2 ILE A   3      14.381  50.366  11.710
+ATOM      0  N   ILE A   4      15.647  45.758  12.381
+ATOM      1  CA  ILE A   4      16.244  44.656  13.124
+ATOM      2  C   ILE A   4      17.834  44.837  12.969
+ATOM      3  O   ILE A   4      18.635  44.068  12.450
+ATOM      4  H   ILE A   4      15.447  45.665  11.429
+ATOM      5  CB  ILE A   4      15.799  43.305  12.533
+ATOM      6  CG1 ILE A   4      16.251  42.133  13.388
+ATOM      7  CD  ILE A   4      15.540  40.864  12.948
+ATOM      8  CG2 ILE A   4      16.381  43.130  11.140
+ATOM      0  N   ILE A   5      18.189  45.994  13.505
+ATOM      1  CA  ILE A   5      19.564  46.470  13.486
+ATOM      2  C   ILE A   5      20.633  45.470  14.022
+ATOM      3  O   ILE A   5      20.596  44.947  15.131
+ATOM      4  H   ILE A   5      17.505  46.548  13.929
+ATOM      5  CB  ILE A   5      19.637  47.745  14.346
+ATOM      6  CG1 ILE A   5      18.713  48.835  13.829
+ATOM      7  CD  ILE A   5      18.495  49.886  14.905
+ATOM      8  CG2 ILE A   5      21.056  48.288  14.351
+ATOM      0  N   LYS A   6      21.592  45.221  13.142
+ATOM      1  CA  LYS A   6      22.679  44.295  13.424
+ATOM      2  C   LYS A   6      23.936  45.030  13.883
+ATOM      3  O   LYS A   6      24.307  46.061  13.323
+ATOM      4  H   LYS A   6      21.569  45.673  12.276
+ATOM      5  CB  LYS A   6      23.005  43.500  12.146
+ATOM      6  CG  LYS A   6      21.892  42.533  11.777
+ATOM      7  CD  LYS A   6      22.224  41.731  10.529
+ATOM      8  CE  LYS A   6      21.111  40.764  10.160
+ATOM      9  NZ  LYS A   6      21.434  39.983   8.946
+TER
+ENDMDL                       
